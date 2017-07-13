@@ -4,6 +4,8 @@ This is the original *Speed Survival* game mode, as previously seen on http://hc
 
 The game mode has been decommissioned, and is now free to use by anyone (and open source).
 
+This mode takes control of the entire server, meaning you need to run a separate server for this minigame. BungeeCord is recommended.
+
 Gameplay:
 - Players start on a randomly generated world. The plugin ensures that the world is not an ocean world.
 - Upon game start, players have to gather supplies, as in every other survival game mode.
