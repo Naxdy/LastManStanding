@@ -103,7 +103,7 @@ public class LastManStanding extends JavaPlugin implements Listener
 			((Player)sender).sendMessage(formatStr(ChatColor.RED, "You are not in a match."));
 			return true;
 		}
-		else if(command.getName().equalsIgnoreCase("hub") && !(sender instanceof Player))
+		else if(command.getName().equalsIgnoreCase("who") && !(sender instanceof Player))
 		{
 			String plrs = "";
 			for(Player p : Bukkit.getOnlinePlayers())
