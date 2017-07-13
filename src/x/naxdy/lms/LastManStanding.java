@@ -18,18 +18,13 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import x.naxdy.hcmcpvp.HcmcCore;
-
 public class LastManStanding extends JavaPlugin implements Listener
 {
 	private static Logger log;
-	private static HcmcCore core;	
 	
 	private List<LMSMatch> matches;
 	private int instanceCount;
@@ -38,7 +33,6 @@ public class LastManStanding extends JavaPlugin implements Listener
 	public void onEnable()
 	{
 		log = this.getLogger();
-		core = (HcmcCore)Bukkit.getPluginManager().getPlugin("HcmcCore");
 		
 		log.info("Registering events...");
 		getServer().getPluginManager().registerEvents(this, this);
@@ -88,7 +82,7 @@ public class LastManStanding extends JavaPlugin implements Listener
 			{
 				if(matches.get(i).isInMatch((Player)sender))
 				{
-					((Player)sender).sendMessage(HcmcCore.formatStr(ChatColor.RED, "You are already in a match!"));
+					((Player)sender).sendMessage(formatStr(ChatColor.RED, "You are already in a match!"));
 					return true;
 				}
 			}
@@ -106,7 +100,7 @@ public class LastManStanding extends JavaPlugin implements Listener
 				}
 			}
 			
-			((Player)sender).sendMessage(HcmcCore.formatStr(ChatColor.RED, "You are not in a match."));
+			((Player)sender).sendMessage(formatStr(ChatColor.RED, "You are not in a match."));
 			return true;
 		}
 		else if(command.getName().equalsIgnoreCase("hub") && !(sender instanceof Player))
@@ -120,25 +114,13 @@ public class LastManStanding extends JavaPlugin implements Listener
 			sender.sendMessage("Online Players [" + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers() + "]:\n" + plrs);
 			return true;
 		}
-		else if(command.getName().equalsIgnoreCase("help"))
+		else if(command.getName().equalsIgnoreCase("lms"))
 		{
-			printHelp(sender);
+			sender.sendMessage(ChatColor.GOLD + "This server is running " + ChatColor.BOLD + "LastManStanding" + ChatColor.RESET + " " + ChatColor.GOLD + "v" + this.getDescription().getVersion() +
+					"\n" + ChatColor.GRAY + "Contribute to this plugin at " + ChatColor.YELLOW + "https://github.com/xNaXDy/LastManStanding");
 			return true;
 		}
 		return false;
-	}
-	
-	private void printHelp(CommandSender p)
-	{
-		p.sendMessage(ChatColor.GRAY + "-- " + ChatColor.YELLOW + "Commands" + ChatColor.GRAY + " --");
-		p.sendMessage(helpMsg("/who", "Shows all players remaining in the match."));
-		p.sendMessage(helpMsg("/match", "Sends you to a new match once you've died."));
-		p.sendMessage(helpMsg("/hub", "Returns you to the HCMCPVP Hub."));
-	}
-	
-	private String helpMsg(String cmd, String msg)
-	{
-		return ChatColor.BLACK + "[" + ChatColor.YELLOW + cmd + ChatColor.BLACK + "]" + ChatColor.GRAY + " - " + msg + ChatColor.RESET;
 	}
 	
 	@EventHandler
@@ -146,9 +128,7 @@ public class LastManStanding extends JavaPlugin implements Listener
 	{
 		event.setJoinMessage("");
 		
-		event.getPlayer().setDisplayName(core.getPremiumColor(event.getPlayer()) + event.getPlayer().getName() + ChatColor.RESET);
-		
-		event.getPlayer().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "--- SPEED SURVIVAL -- \n" + ChatColor.RESET + "" + ChatColor.GRAY + "Everyone starts on the same playing field. Gather supplies in a small world, and defeat all your opponents. Last man standing wins!");
+		event.getPlayer().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "--- Last Man Standing -- \n" + ChatColor.RESET + "" + ChatColor.GRAY + "Everyone starts on the same playing field. Gather supplies in a small world, and defeat all your opponents. Last man standing wins!");
 		
 		if(event.getPlayer().isOp())
 			return;
@@ -276,11 +256,6 @@ public class LastManStanding extends JavaPlugin implements Listener
 		deleteDir(dir);
 	}
 	
-	public static HcmcCore getCore()
-	{
-		return core;
-	}
-	
 	private static void deleteDir(File f)
 	{
 		if(f.exists())
@@ -306,5 +281,15 @@ public class LastManStanding extends JavaPlugin implements Listener
 				f.delete();
 			}
 		}
+	}
+	
+	public static String formatStr(ChatColor col, String msg)
+	{
+		return col + "" + ChatColor.BOLD + "> " + ChatColor.RESET + "" + ChatColor.GRAY + msg;
+	}
+	
+	public static String formatTime(int time)
+	{
+		return (String.format("%02d", (int)(time/60)) + ":" + String.format("%02d", (int)(time%60)));
 	}
 }

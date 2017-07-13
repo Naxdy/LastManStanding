@@ -30,8 +30,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import x.naxdy.hcmcpvp.HcmcCore;
-
 public class LMSMatch
 {
 	private World world;
@@ -133,7 +131,7 @@ public class LMSMatch
 			
 			if((matchCounter == 60 || matchCounter == 30 || matchCounter <= 10) && matchCounter > 0)
 			{
-				broadcastMessage(ChatColor.YELLOW + "The match will start in " + HcmcCore.formatTime(matchCounter) + "!");
+				broadcastMessage(ChatColor.YELLOW + "The match will start in " + LastManStanding.formatTime(matchCounter) + "!");
 			}
 		}
 		else
@@ -155,7 +153,7 @@ public class LMSMatch
 			
 			if((getMatchTime() == 30 || getMatchTime() >= LMSEvent.INVULN_DONE.getTimeAt()-10) && getMatchTime() < LMSEvent.INVULN_DONE.getTimeAt())
 			{
-				broadcastMessage(ChatColor.RED + "Invulnerability will fade in " + HcmcCore.formatTime(LMSEvent.INVULN_DONE.getTimeAt()-(int)getMatchTime()));
+				broadcastMessage(ChatColor.RED + "Invulnerability will fade in " + LastManStanding.formatTime(LMSEvent.INVULN_DONE.getTimeAt()-(int)getMatchTime()));
 			}
 			
 			if(getMatchTime() >= LMSEvent.INVULN_DONE.getTimeAt() && !eventsHappened.contains(LMSEvent.INVULN_DONE))
@@ -176,7 +174,7 @@ public class LMSMatch
 				int feastIn = (int) (LMSEvent.FEAST_SPAWN.getTimeAt() - getMatchTime());
 				if((feastIn == 300 || feastIn == 120 || feastIn == 60 || feastIn == 30 || feastIn <= 10) && feastIn > 0)
 				{
-					broadcastMessage(ChatColor.YELLOW + "Chests containing diamond gear will spawn at X:0 Z:0 in " + HcmcCore.formatTime(feastIn) + "!");
+					broadcastMessage(ChatColor.YELLOW + "Chests containing diamond gear will spawn at X:0 Z:0 in " + LastManStanding.formatTime(feastIn) + "!");
 				}
 				else if(feastIn <= 0 && !eventsHappened.contains(LMSEvent.FEAST_SPAWN))
 				{
@@ -191,7 +189,6 @@ public class LMSMatch
 			{
 				LMSPlayer winner = getAllContestants().get(0);
 				broadcastMessage(ChatColor.GREEN + winner.getPlayer().getDisplayName() + ChatColor.GREEN + " has won! A new match will start in 10 seconds.");
-				winner.savePlayerStats(contestants.size(), beginningPlayers);
 				instanceCloseTimer--;
 			}
 			
@@ -217,9 +214,9 @@ public class LMSMatch
 		p.teleport(getRandomSpawnLocation());
 		p.setGameMode(GameMode.SURVIVAL);
 		if(contestants.size() < minPlayers)
-			p.sendMessage(HcmcCore.formatStr(ChatColor.AQUA, "The match will start once at least " + minPlayers + " players have joined.\nPlease wait, or play another gamemode at our /hub"));
+			p.sendMessage(LastManStanding.formatStr(ChatColor.AQUA, "The match will start once at least " + minPlayers + " players have joined.\nPlease wait, or play another gamemode at our /hub"));
 		
-		broadcastMessage(HcmcCore.formatStr(ChatColor.YELLOW, p.getDisplayName() + ChatColor.GRAY + " joined the match."));
+		broadcastMessage(LastManStanding.formatStr(ChatColor.YELLOW, p.getDisplayName() + ChatColor.GRAY + " joined the match."));
 		
 		initPlayer(p);
 		
@@ -233,12 +230,12 @@ public class LMSMatch
 		
 		if(!hasStarted())
 		{
-			p.sendMessage(HcmcCore.formatStr(ChatColor.RED, "The game hasn't started yet!"));
+			p.sendMessage(LastManStanding.formatStr(ChatColor.RED, "The game hasn't started yet!"));
 			return true;
 		}
 		else if(!eventsHappened.contains(LMSEvent.INVULN_DONE))
 		{
-			p.sendMessage(HcmcCore.formatStr(ChatColor.RED, "You can't do that while everyone is invulnerable."));
+			p.sendMessage(LastManStanding.formatStr(ChatColor.RED, "You can't do that while everyone is invulnerable."));
 			return true;
 		}
 		else
@@ -252,7 +249,7 @@ public class LMSMatch
 			
 			plrs = plrs.substring(0, plrs.length()-2);
 			
-			p.sendMessage(HcmcCore.formatStr(ChatColor.AQUA, "Remaining Players [" + remainingPlayers.size() + "/" + beginningPlayers + "]:\n" + plrs));
+			p.sendMessage(LastManStanding.formatStr(ChatColor.AQUA, "Remaining Players [" + remainingPlayers.size() + "/" + beginningPlayers + "]:\n" + plrs));
 			return true;
 		}
 	}
@@ -264,20 +261,20 @@ public class LMSMatch
 			boolean spec = event.getPlayer().getGameMode() == GameMode.SPECTATOR && !event.getPlayer().isOp();
 			if(spec)
 			{
-				if(LastManStanding.getCore().getPremiumCode(event.getPlayer()) < 1)
+				if(event.getPlayer().hasPermission("lms.spectatorchat"))
 				{
-					event.getPlayer().sendMessage(HcmcCore.formatStr(ChatColor.RED, "Only premium members may chat while spectating.\nBecome a premium member at http://hcmcpvp.com/"));
+					event.getPlayer().sendMessage(LastManStanding.formatStr(ChatColor.RED, "You don't have permission to chat while spectating."));
 				}
 				else
 				{
 					broadcastMessage(ChatColor.GRAY + "<" + event.getPlayer().getDisplayName() + ChatColor.GRAY + "> " + ChatColor.GRAY + event.getMessage(), spec);
-					LastManStanding.getLMSLogger().info("[" + world.getName() + "] (SPEC)" + "<" + event.getPlayer().getDisplayName() + "> " + event.getMessage());
+					Bukkit.getConsoleSender().sendMessage("[" + world.getName() + "] (SPEC)" + "<" + event.getPlayer().getDisplayName() + "> " + event.getMessage());
 				}
 			}
 			else
 			{
 				broadcastMessage("<" + event.getPlayer().getDisplayName() + "> " + event.getMessage(), spec);
-				LastManStanding.getLMSLogger().info("[" + world.getName() + "] " + "<" + event.getPlayer().getDisplayName() + "> " + event.getMessage());
+				Bukkit.getConsoleSender().sendMessage("[" + world.getName() + "] " + "<" + event.getPlayer().getDisplayName() + "> " + event.getMessage());
 			}
 			
 			event.setCancelled(true);
@@ -293,11 +290,10 @@ public class LMSMatch
 		
 		if(hasStarted() && eventsHappened.contains(LMSEvent.INVULN_DONE))
 		{
-			broadcastMessage(HcmcCore.formatStr(ChatColor.AQUA, event.getPlayer().getDisplayName() + ChatColor.GRAY + " has been eliminated due to disconnection!\nPlayers remaining: " + (contestants.size()-1)));
-			getLMSPlayer(event.getPlayer()).savePlayerStats(contestants.size(), beginningPlayers);
+			broadcastMessage(LastManStanding.formatStr(ChatColor.AQUA, event.getPlayer().getDisplayName() + ChatColor.GRAY + " has been eliminated due to disconnection!\nPlayers remaining: " + (contestants.size()-1)));
 		}
 		else
-			broadcastMessage(HcmcCore.formatStr(ChatColor.YELLOW, event.getPlayer().getDisplayName() + ChatColor.GRAY + " has left the match."));
+			broadcastMessage(LastManStanding.formatStr(ChatColor.YELLOW, event.getPlayer().getDisplayName() + ChatColor.GRAY + " has left the match."));
 		
 		removeLMSPlayer(event.getPlayer());
 		return true;
@@ -347,13 +343,13 @@ public class LMSMatch
 		{
 			if(!hasStarted())
 			{
-				event.getPlayer().sendMessage(HcmcCore.formatStr(ChatColor.RED, "The match hasn't started yet!"));
+				event.getPlayer().sendMessage(LastManStanding.formatStr(ChatColor.RED, "The match hasn't started yet!"));
 				event.setCancelled(true);
 			}
 			else if(event.getBlock().getType() == Material.DIAMOND_ORE)
 			{
 				event.setCancelled(true);
-				event.getPlayer().sendMessage(HcmcCore.formatStr(ChatColor.RED, "A mysterious force forbids you to mine this item."));
+				event.getPlayer().sendMessage(LastManStanding.formatStr(ChatColor.RED, "A mysterious force forbids you to mine this item."));
 			}
 			
 			return true;
@@ -392,10 +388,10 @@ public class LMSMatch
 		if(!isInMatch(event.getEntity()))
 			return false;
 		
-		broadcastMessage(HcmcCore.formatStr(ChatColor.AQUA, event.getEntity().getDisplayName() + ChatColor.GRAY + " has been eliminated! Players remaining: " + (contestants.size()-1)));
+		broadcastMessage(LastManStanding.formatStr(ChatColor.AQUA, event.getEntity().getDisplayName() + ChatColor.GRAY + " has been eliminated! Players remaining: " + (contestants.size()-1)));
 		
 		event.getEntity().setGameMode(GameMode.SPECTATOR);
-		event.getEntity().sendMessage(HcmcCore.formatStr(ChatColor.RED, "You have been eliminated at rank " + ChatColor.YELLOW + contestants.size() + ChatColor.GRAY + ". You may continue spectating, or join another match by typing " + ChatColor.YELLOW + "/match"));
+		event.getEntity().sendMessage(LastManStanding.formatStr(ChatColor.RED, "You have been eliminated at rank " + ChatColor.YELLOW + contestants.size() + ChatColor.GRAY + ". You may continue spectating, or join another match by typing " + ChatColor.YELLOW + "/match"));
 		removeLMSPlayer(event.getEntity());
 		
 		event.setDeathMessage("");
@@ -429,20 +425,7 @@ public class LMSMatch
 			return false;
 		
 		if(contestants.size() == 1)
-			tracker.sendMessage(HcmcCore.formatStr(ChatColor.AQUA, "You're the only one!"));
-		/*else if(contestants.size() == 2)
-		{
-			if(getAllContestants().get(0).getPlayer().equals(tracker))
-			{
-				tracker.setCompassTarget(getAllContestants().get(1).getPlayer().getLocation());
-				tracker.sendMessage(HcmcCore.formatStr(ChatColor.AQUA, "Your compass is pointing at " + getAllContestants().get(1).getPlayer().getDisplayName() + ChatColor.GRAY + "."));
-			}
-			else
-			{
-				tracker.setCompassTarget(getAllContestants().get(0).getPlayer().getLocation());
-				tracker.sendMessage(HcmcCore.formatStr(ChatColor.AQUA, "Your compass is pointing at " + getAllContestants().get(0).getPlayer().getDisplayName() + ChatColor.GRAY + "."));
-			}
-		}*/
+			tracker.sendMessage(LastManStanding.formatStr(ChatColor.AQUA, "You're the only one!"));
 		else
 		{
 			List<LMSPlayer> others = getAllContestants();
@@ -467,11 +450,12 @@ public class LMSMatch
 			
 			if(target == null)
 			{
-				tracker.sendMessage(HcmcCore.formatStr(ChatColor.RED, "Everyone else is near you!"));
+				tracker.sendMessage(LastManStanding.formatStr(ChatColor.RED, "Everyone else is near you!"));
 			}
 			else
 			{
-				tracker.sendMessage(HcmcCore.formatStr(ChatColor.AQUA, "Closest Player: " + target.getDisplayName() + ChatColor.GRAY + ". Position: X:" + target.getLocation().getBlockX() + " Z:" + target.getLocation().getBlockZ()));
+				// TODO: make this better.
+				tracker.sendMessage(LastManStanding.formatStr(ChatColor.AQUA, "Closest Player: " + target.getDisplayName() + ChatColor.GRAY + ". Position: X:" + target.getLocation().getBlockX() + " Z:" + target.getLocation().getBlockZ()));
 			}
 		}
 		
@@ -536,14 +520,7 @@ public class LMSMatch
 	}
 	
 	private void endMatch()
-	{
-		// this should probably just contain the rank 1 player, but better safe than sorry.
-		ArrayList<LMSPlayer> finalContestants = getAllContestants();
-		for(int i = 0; i < finalContestants.size(); i++)
-		{
-			finalContestants.get(i).savePlayerStats(contestants.size(), beginningPlayers);
-		}
-		
+	{		
 		for(Player p : world.getPlayers())
 		{
 			if(!p.isOp())
@@ -627,10 +604,7 @@ public class LMSMatch
 	}
 	
 	private void removeLMSPlayer(UUID p)
-	{
-		if(eventsHappened.contains(LMSEvent.INVULN_DONE))
-			contestants.get(p).savePlayerStats(contestants.size(), beginningPlayers);
-		
+	{		
 		contestants.remove(p);
 	}
 	

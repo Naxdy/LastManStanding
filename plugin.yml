@@ -1,20 +1,19 @@
 main: x.naxdy.lms.LastManStanding
-name: HcLastManStanding
-version: 0.1a
+name: LastManStanding
+version: 1.0-exp
 author: Naxdy
 description: LMS
 commands:
   match:
     description: Start a new match
     usage: /match
-    permission-message: Unknown command! Type "/help" for help.
+    permission-message: Your permissions are messed up.
   who:
     description: List all players
     usage: /match
     aliases: [list,ls]
-    permission-message: Unknown command! Type "/help" for help.
-  help:
-    description: List cmd
-    usage: /help
-    aliases: [me,tell,msg,m,w,whisper,cmds,commands]
-    permission-message: Unknown command! Type "/help" for help.
+    permission-message: Your permissions are messed up.
+  lms:
+    description: Displays plugin info
+    usage: /lms
+    permission-message: Your permissions are messed up.

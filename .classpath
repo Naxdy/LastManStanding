@@ -7,6 +7,5 @@
 			<attribute name="javadoc_location" value="jar:file:/Volumes/OS%20X%20Data/home/xnaxdy/gitProjects/MinecraftArena/server/bukkit-1.11.1-R0.1-20161220.203810-1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/HcmcCore"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
