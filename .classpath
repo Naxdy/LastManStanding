@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/bukkit-latest.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/Volumes/OS%20X%20Data/home/xnaxdy/gitProjects/MinecraftArena/server/bukkit-1.11.1-R0.1-20161220.203810-1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/HcmcCore"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
