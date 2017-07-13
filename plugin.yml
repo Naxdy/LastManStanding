@@ -1,6 +1,6 @@
 main: x.naxdy.lms.LastManStanding
 name: LastManStanding
-version: 1.0-exp
+version: 1.0
 author: Naxdy
 description: LMS
 commands:

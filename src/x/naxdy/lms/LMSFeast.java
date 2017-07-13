@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class LMSFeast
 {
+	// TODO: pull items from config?
 	private static List<ItemStack> possibleItems = Arrays.asList(new ItemStack(Material.DIAMOND_SWORD),
 			new ItemStack(Material.DIAMOND_HELMET),
 			new ItemStack(Material.DIAMOND_LEGGINGS),

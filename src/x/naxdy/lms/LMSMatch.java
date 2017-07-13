@@ -547,6 +547,8 @@ public class LMSMatch
 			if((spectatorOnly && (p.getGameMode() == GameMode.SPECTATOR || p.isOp())) || !spectatorOnly)
 				p.sendMessage(message);
 		}
+		
+		Bukkit.getConsoleSender().sendMessage("[" + world.getName() + "] " + message);
 	}
 	
 	public boolean isInMatch(Player p)
