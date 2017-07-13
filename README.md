@@ -1,5 +1,7 @@
 # Last Man Standing
 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LX3MG2BV3NGES)
+
 This is the original *Speed Survival* game mode, as previously seen on http://hcmcpvp.com/
 
 The game mode has been decommissioned, and is now free to use by anyone (and open source).
@@ -19,6 +21,10 @@ Features:
 
 Permissions:
 - *lms.spectatorchat* allows spectators to chat with one another. Players without this permission will receive a no-permission message.
+
+Commands:
+- /who - lists all players in the current match.
+- /match - transfers the player to a new match after death.
 
 **Note:** Server OPs cannot play, as it is expected they monitor the game in spectator mode and ensure no one is cheating. If an OP wants to play, they need to deop themselves and re-join the server.
 
